@@ -1,0 +1,11 @@
+.gradle
+/local.properties
+.idea
+build/
+/Hotels.iml
+/gradle.properties
+/gradlew
+/gradlew.bat
+/gradle/
+/app/app.iml
+/RxRetrofitAndScreenOrientation.iml
