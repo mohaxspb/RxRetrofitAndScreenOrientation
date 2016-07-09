@@ -2,7 +2,6 @@ package ru.kuchanov.rx.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -21,11 +20,11 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import ru.kuchanov.rx.Const;
 import ru.kuchanov.rx.R;
 import ru.kuchanov.rx.adapter.RecyclerAdapterHotelsList;
 import ru.kuchanov.rx.model.Model;
 import ru.kuchanov.rx.retrofit.SingltonRetrofit;
-import ru.kuchanov.rx.Const;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,32 +33,17 @@ import rx.schedulers.Schedulers;
 public class FragmentHotelsList extends Fragment
 {
     private static final String TAG = FragmentHotelsList.class.getSimpleName();
-   private Subscription subscription;
+    private Subscription subscription;
     private ImageView loadingIndicator;
     private RecyclerView recyclerView;
-    private Context ctx;
     private ArrayList<Model> models = new ArrayList<>();
     private boolean isLoading;
 
     @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        this.ctx = context;
-    }
-
-    @Override
-    public void onDetach()
-    {
-        super.onDetach();
-        ctx = null;
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
@@ -79,7 +63,7 @@ public class FragmentHotelsList extends Fragment
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
         loadingIndicator = (ImageView) v.findViewById(R.id.loading_indicator);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new RecyclerAdapterHotelsList(models));
 
         if (models.size() == 0 || isLoading)
@@ -167,6 +151,12 @@ public class FragmentHotelsList extends Fragment
                     public void onError(Throwable e)
                     {
                         Log.d(TAG, "onError", e);
+                        isLoading = false;
+                        //prevent change UI after detach frag
+                        if (!isAdded())
+                        {
+                            return;
+                        }
                         showLoadingIndicator(false);
                         Snackbar.make(recyclerView, R.string.connection_error, Snackbar.LENGTH_SHORT)
                                 .setAction(R.string.try_again, new View.OnClickListener()
@@ -186,12 +176,16 @@ public class FragmentHotelsList extends Fragment
                     public void onNext(ArrayList<Model> newModels)
                     {
                         Log.d(TAG, "onNext: " + newModels.size());
-                        recyclerView.getAdapter().notifyItemRangeRemoved(0, models.size());
+                        isLoading = false;
                         models.clear();
-
                         models.addAll(newModels);
-                        recyclerView.getAdapter().notifyItemRangeInserted(0, models.size());
 
+                        //prevent change UI after detach frag
+                        if (!isAdded())
+                        {
+                            return;
+                        }
+                        recyclerView.getAdapter().notifyItemRangeInserted(0, models.size());
                         showLoadingIndicator(false);
                     }
                 });
