@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">RxRetrofitAndScreenOrientation</string>
-    <string name="sort">Sort by</string>
     <string name="refresh">Refresh</string>
     <string name="connection_error">Connection error</string>
     <string name="try_again">Try again</string>

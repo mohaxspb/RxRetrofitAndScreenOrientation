@@ -30,7 +30,7 @@ public class RecyclerAdapterHotelsList extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        final ViewHolderHotel holderHotel = (ViewHolderHotel) holder;
+        ViewHolderHotel holderHotel = (ViewHolderHotel) holder;
         Model model = models.get(position);
 
         holderHotel.title.setText(model.getTitle());
@@ -45,13 +45,11 @@ public class RecyclerAdapterHotelsList extends RecyclerView.Adapter<RecyclerView
 
     public static class ViewHolderHotel extends RecyclerView.ViewHolder
     {
-        public View root;
         public TextView title, text;
 
         public ViewHolderHotel(View v)
         {
             super(v);
-            root = v.findViewById(R.id.root);
             title = (TextView) v.findViewById(R.id.title);
             text = (TextView) v.findViewById(R.id.text);
         }

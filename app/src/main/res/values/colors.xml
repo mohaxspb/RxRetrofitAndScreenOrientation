@@ -16,6 +16,6 @@
     <color name="my_material_gray_100">#f5f5f5</color>
     <color name="my_material_gray_50">#fafafa</color>
 
-    <color name="textColorPrimary">@color/my_material_gray_800</color>
-    <color name="textColorSecondary">@color/my_material_gray_600</color>
+    <color name="textColorTitle">@color/my_material_gray_800</color>
+    <color name="textColorMain">@color/my_material_gray_600</color>
 </resources>
