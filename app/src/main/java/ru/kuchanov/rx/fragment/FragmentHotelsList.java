@@ -42,7 +42,7 @@ public class FragmentHotelsList extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate");
+//        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -51,6 +51,7 @@ public class FragmentHotelsList extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+//        Log.d(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_hotels_list, container, false);
 
         //restore models and loading status
@@ -152,41 +153,41 @@ public class FragmentHotelsList extends Fragment
                     {
                         Log.d(TAG, "onError", e);
                         isLoading = false;
-                        //prevent change UI after detach frag
-                        if (!isAdded())
+                        if (isAdded())
                         {
-                            return;
-                        }
-                        showLoadingIndicator(false);
-                        Snackbar.make(recyclerView, R.string.connection_error, Snackbar.LENGTH_SHORT)
-                                .setAction(R.string.try_again, new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
+                            showLoadingIndicator(false);
+                            Snackbar.make(recyclerView, R.string.connection_error, Snackbar.LENGTH_SHORT)
+                                    .setAction(R.string.try_again, new View.OnClickListener()
                                     {
-                                        SingltonRetrofit.resetModelsObservable();
-                                        showLoadingIndicator(true);
-                                        getHotelsList();
-                                    }
-                                })
-                                .show();
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            SingltonRetrofit.resetModelsObservable();
+                                            showLoadingIndicator(true);
+                                            getHotelsList();
+                                        }
+                                    })
+                                    .show();
+                        }
                     }
 
                     @Override
                     public void onNext(ArrayList<Model> newModels)
                     {
                         Log.d(TAG, "onNext: " + newModels.size());
+                        int prevSize = models.size();
                         isLoading = false;
+                        if (isAdded())
+                        {
+                            recyclerView.getAdapter().notifyItemRangeRemoved(0, prevSize);
+                        }
                         models.clear();
                         models.addAll(newModels);
-
-                        //prevent change UI after detach frag
-                        if (!isAdded())
+                        if (isAdded())
                         {
-                            return;
+                            recyclerView.getAdapter().notifyItemRangeInserted(0, models.size());
+                            showLoadingIndicator(false);
                         }
-                        recyclerView.getAdapter().notifyItemRangeInserted(0, models.size());
-                        showLoadingIndicator(false);
                     }
                 });
     }
