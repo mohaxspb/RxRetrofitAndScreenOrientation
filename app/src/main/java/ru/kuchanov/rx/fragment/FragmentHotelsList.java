@@ -42,19 +42,39 @@ public class FragmentHotelsList extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
-//        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.menu_models_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        switch (id)
+        {
+            case R.id.refresh:
+                Log.d(TAG, "refresh clicked");
+                SingltonRetrofit.resetModelsObservable();
+                showLoadingIndicator(true);
+                getHotelsList();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-//        Log.d(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_hotels_list, container, false);
 
-        //restore models and loading status
         if (savedInstanceState != null)
         {
             models = savedInstanceState.getParcelableArrayList(Const.KEY_MODELS);
@@ -96,39 +116,6 @@ public class FragmentHotelsList extends Fragment
             loadingIndicator.animate().cancel();
             loadingIndicator.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if (subscription != null && !subscription.isUnsubscribed())
-        {
-            subscription.unsubscribe();
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        inflater.inflate(R.menu.menu_models_list, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        switch (id)
-        {
-            case R.id.refresh:
-                Log.d(TAG, "refresh clicked");
-                SingltonRetrofit.resetModelsObservable();
-                showLoadingIndicator(true);
-                getHotelsList();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void getHotelsList()
@@ -198,5 +185,15 @@ public class FragmentHotelsList extends Fragment
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Const.KEY_MODELS, models);
         outState.putBoolean(Const.KEY_IS_LOADING, isLoading);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if (subscription != null && !subscription.isUnsubscribed())
+        {
+            subscription.unsubscribe();
+        }
     }
 }
