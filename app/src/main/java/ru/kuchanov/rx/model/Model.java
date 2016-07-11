@@ -3,7 +3,6 @@ package ru.kuchanov.rx.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Model implements Parcelable
@@ -78,14 +77,5 @@ public class Model implements Parcelable
     public void setText(String text)
     {
         this.text = text;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Model{" +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                '}';
     }
 }
