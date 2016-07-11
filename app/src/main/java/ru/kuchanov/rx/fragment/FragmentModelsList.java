@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import ru.kuchanov.rx.Const;
 import ru.kuchanov.rx.R;
-import ru.kuchanov.rx.adapter.RecyclerAdapterHotelsList;
+import ru.kuchanov.rx.adapter.RecyclerAdapterModelsList;
 import ru.kuchanov.rx.model.Model;
 import ru.kuchanov.rx.retrofit.SingltonRetrofit;
 import rx.Subscriber;
@@ -30,9 +30,9 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class FragmentHotelsList extends Fragment
+public class FragmentModelsList extends Fragment
 {
-    private static final String TAG = FragmentHotelsList.class.getSimpleName();
+    private static final String TAG = FragmentModelsList.class.getSimpleName();
     private Subscription subscription;
     private ImageView loadingIndicator;
     private RecyclerView recyclerView;
@@ -73,7 +73,7 @@ public class FragmentHotelsList extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View v = inflater.inflate(R.layout.fragment_hotels_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_models_list, container, false);
 
         if (savedInstanceState != null)
         {
@@ -85,7 +85,7 @@ public class FragmentHotelsList extends Fragment
         loadingIndicator = (ImageView) v.findViewById(R.id.loading_indicator);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new RecyclerAdapterHotelsList(models));
+        recyclerView.setAdapter(new RecyclerAdapterModelsList(models));
 
         if (models.size() == 0 || isLoading)
         {
