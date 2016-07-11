@@ -63,7 +63,7 @@ public class FragmentHotelsList extends Fragment
                 Log.d(TAG, "refresh clicked");
                 SingltonRetrofit.resetModelsObservable();
                 showLoadingIndicator(true);
-                getHotelsList();
+                getModelsList();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -90,7 +90,7 @@ public class FragmentHotelsList extends Fragment
         if (models.size() == 0 || isLoading)
         {
             showLoadingIndicator(true);
-            getHotelsList();
+            getModelsList();
         }
 
         return v;
@@ -118,13 +118,13 @@ public class FragmentHotelsList extends Fragment
         }
     }
 
-    private void getHotelsList()
+    private void getModelsList()
     {
         if (subscription != null && !subscription.isUnsubscribed())
         {
             subscription.unsubscribe();
         }
-        subscription = SingltonRetrofit.getHotelsObservable().
+        subscription = SingltonRetrofit.getModelsObservable().
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(new Subscriber<ArrayList<Model>>()
@@ -151,7 +151,7 @@ public class FragmentHotelsList extends Fragment
                                         {
                                             SingltonRetrofit.resetModelsObservable();
                                             showLoadingIndicator(true);
-                                            getHotelsList();
+                                            getModelsList();
                                         }
                                     })
                                     .show();

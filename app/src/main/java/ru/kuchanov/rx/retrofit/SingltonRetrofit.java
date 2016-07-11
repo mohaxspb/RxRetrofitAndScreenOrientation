@@ -80,7 +80,7 @@ public class SingltonRetrofit
     }
 
 
-    public static Observable<ArrayList<Model>> getHotelsObservable()
+    public static Observable<ArrayList<Model>> getModelsObservable()
     {
         if (observableModelsList == null)
         {
