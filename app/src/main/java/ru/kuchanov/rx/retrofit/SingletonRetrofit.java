@@ -18,15 +18,15 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
-public class SingltonRetrofit
+public class SingletonRetrofit
 {
-    private static final String TAG = SingltonRetrofit.class.getSimpleName();
+    private static final String TAG = SingletonRetrofit.class.getSimpleName();
 
     private static Observable<ArrayList<Model>> observableRetrofit;
     private static BehaviorSubject<ArrayList<Model>> observableModelsList;
     private static Subscription subscription;
 
-    private SingltonRetrofit()
+    private SingletonRetrofit()
     {
     }
 

@@ -24,7 +24,7 @@ import ru.kuchanov.rx.Const;
 import ru.kuchanov.rx.R;
 import ru.kuchanov.rx.adapter.RecyclerAdapterModelsList;
 import ru.kuchanov.rx.model.Model;
-import ru.kuchanov.rx.retrofit.SingltonRetrofit;
+import ru.kuchanov.rx.retrofit.SingletonRetrofit;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,7 +61,7 @@ public class FragmentModelsList extends Fragment
         {
             case R.id.refresh:
                 Log.d(TAG, "refresh clicked");
-                SingltonRetrofit.resetModelsObservable();
+                SingletonRetrofit.resetModelsObservable();
                 showLoadingIndicator(true);
                 getModelsList();
                 return true;
@@ -124,7 +124,7 @@ public class FragmentModelsList extends Fragment
         {
             subscription.unsubscribe();
         }
-        subscription = SingltonRetrofit.getModelsObservable().
+        subscription = SingletonRetrofit.getModelsObservable().
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(new Subscriber<ArrayList<Model>>()
@@ -149,7 +149,7 @@ public class FragmentModelsList extends Fragment
                                         @Override
                                         public void onClick(View v)
                                         {
-                                            SingltonRetrofit.resetModelsObservable();
+                                            SingletonRetrofit.resetModelsObservable();
                                             showLoadingIndicator(true);
                                             getModelsList();
                                         }

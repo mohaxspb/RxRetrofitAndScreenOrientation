@@ -2,7 +2,7 @@ package ru.kuchanov.rx;
 
 import android.app.Application;
 
-import ru.kuchanov.rx.retrofit.SingltonRetrofit;
+import ru.kuchanov.rx.retrofit.SingletonRetrofit;
 
 public class MyApplication extends Application
 {
@@ -10,6 +10,6 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        SingltonRetrofit.init();
+        SingletonRetrofit.init();
     }
 }
