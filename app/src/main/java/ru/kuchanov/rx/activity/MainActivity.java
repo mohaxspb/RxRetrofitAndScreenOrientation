@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import ru.kuchanov.rx.R;
-import ru.kuchanov.rx.fragment.FragmentModelsList;
+import ru.kuchanov.rx.fragment.ModelsListFragment;
 
-public class ActivityMain extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
 {
     private Toolbar toolbar;
 
@@ -25,7 +25,7 @@ public class ActivityMain extends AppCompatActivity
         Fragment fragmentHotelsList = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentHotelsList == null)
         {
-            fragmentHotelsList = new FragmentModelsList();
+            fragmentHotelsList = new ModelsListFragment();
             getSupportFragmentManager().
                     beginTransaction().add(R.id.container, fragmentHotelsList)
                     .commit();

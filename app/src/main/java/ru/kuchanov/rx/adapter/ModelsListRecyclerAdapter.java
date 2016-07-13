@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import ru.kuchanov.rx.R;
 import ru.kuchanov.rx.model.Model;
 
-public class RecyclerAdapterModelsList extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class ModelsListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private ArrayList<Model> models;
 
-    public RecyclerAdapterModelsList(ArrayList<Model> models)
+    public ModelsListRecyclerAdapter(ArrayList<Model> models)
     {
         this.models = models;
     }
@@ -23,7 +23,7 @@ public class RecyclerAdapterModelsList extends RecyclerView.Adapter<RecyclerView
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_model, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_model, parent, false);
         return new ViewHolderHotel(v);
     }
 

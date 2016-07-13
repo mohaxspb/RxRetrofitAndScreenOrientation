@@ -22,17 +22,17 @@ import java.util.ArrayList;
 
 import ru.kuchanov.rx.Const;
 import ru.kuchanov.rx.R;
-import ru.kuchanov.rx.adapter.RecyclerAdapterModelsList;
+import ru.kuchanov.rx.adapter.ModelsListRecyclerAdapter;
 import ru.kuchanov.rx.model.Model;
-import ru.kuchanov.rx.retrofit.SingletonRetrofit;
+import ru.kuchanov.rx.retrofit.RetrofitSingleton;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class FragmentModelsList extends Fragment
+public class ModelsListFragment extends Fragment
 {
-    private static final String TAG = FragmentModelsList.class.getSimpleName();
+    private static final String TAG = ModelsListFragment.class.getSimpleName();
     private Subscription subscription;
     private ImageView loadingIndicator;
     private RecyclerView recyclerView;
@@ -61,7 +61,7 @@ public class FragmentModelsList extends Fragment
         {
             case R.id.refresh:
                 Log.d(TAG, "refresh clicked");
-                SingletonRetrofit.resetModelsObservable();
+                RetrofitSingleton.resetModelsObservable();
                 showLoadingIndicator(true);
                 getModelsList();
                 return true;
@@ -85,7 +85,7 @@ public class FragmentModelsList extends Fragment
         loadingIndicator = (ImageView) v.findViewById(R.id.loading_indicator);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new RecyclerAdapterModelsList(models));
+        recyclerView.setAdapter(new ModelsListRecyclerAdapter(models));
 
         if (models.size() == 0 || isLoading)
         {
@@ -124,7 +124,7 @@ public class FragmentModelsList extends Fragment
         {
             subscription.unsubscribe();
         }
-        subscription = SingletonRetrofit.getModelsObservable().
+        subscription = RetrofitSingleton.getModelsObservable().
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(new Subscriber<ArrayList<Model>>()
@@ -149,7 +149,7 @@ public class FragmentModelsList extends Fragment
                                         @Override
                                         public void onClick(View v)
                                         {
-                                            SingletonRetrofit.resetModelsObservable();
+                                            RetrofitSingleton.resetModelsObservable();
                                             showLoadingIndicator(true);
                                             getModelsList();
                                         }
