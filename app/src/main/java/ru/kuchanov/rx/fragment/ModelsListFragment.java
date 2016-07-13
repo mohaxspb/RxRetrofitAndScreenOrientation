@@ -30,8 +30,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class ModelsListFragment extends Fragment
-{
+public class ModelsListFragment extends Fragment {
     private static final String TAG = ModelsListFragment.class.getSimpleName();
     private Subscription subscription;
     private ImageView loadingIndicator;
@@ -40,25 +39,21 @@ public class ModelsListFragment extends Fragment
     private boolean isLoading;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_models_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id)
-        {
+        switch (id) {
             case R.id.refresh:
                 Log.d(TAG, "refresh clicked");
                 RetrofitSingleton.resetModelsObservable();
@@ -71,12 +66,10 @@ public class ModelsListFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_models_list, container, false);
 
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             models = savedInstanceState.getParcelableArrayList(Const.KEY_MODELS);
             isLoading = savedInstanceState.getBoolean(Const.KEY_IS_LOADING);
         }
@@ -87,8 +80,7 @@ public class ModelsListFragment extends Fragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new ModelsListRecyclerAdapter(models));
 
-        if (models.size() == 0 || isLoading)
-        {
+        if (models.size() == 0 || isLoading) {
             showLoadingIndicator(true);
             getModelsList();
         }
@@ -96,59 +88,46 @@ public class ModelsListFragment extends Fragment
         return v;
     }
 
-    private void showLoadingIndicator(boolean show)
-    {
+    private void showLoadingIndicator(boolean show) {
         isLoading = show;
-        if (isLoading)
-        {
+        if (isLoading) {
             loadingIndicator.setVisibility(View.VISIBLE);
-            loadingIndicator.animate().setInterpolator(new AccelerateDecelerateInterpolator()).rotationBy(360).setDuration(500).setListener(new AnimatorListenerAdapter()
-            {
+            loadingIndicator.animate().setInterpolator(new AccelerateDecelerateInterpolator()).rotationBy(360).setDuration(500).setListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation)
-                {
+                public void onAnimationEnd(Animator animation) {
                     loadingIndicator.animate().setInterpolator(new AccelerateDecelerateInterpolator()).rotationBy(360).setDuration(500).setListener(this);
                 }
             });
         }
-        else
-        {
+        else {
             loadingIndicator.animate().cancel();
             loadingIndicator.setVisibility(View.GONE);
         }
     }
 
-    private void getModelsList()
-    {
-        if (subscription != null && !subscription.isUnsubscribed())
-        {
+    private void getModelsList() {
+        if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
         subscription = RetrofitSingleton.getModelsObservable().
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
-                subscribe(new Subscriber<ArrayList<Model>>()
-                {
+                subscribe(new Subscriber<ArrayList<Model>>() {
                     @Override
-                    public void onCompleted()
-                    {
+                    public void onCompleted() {
                         Log.d(TAG, "onCompleted");
                     }
 
                     @Override
-                    public void onError(Throwable e)
-                    {
+                    public void onError(Throwable e) {
                         Log.d(TAG, "onError", e);
                         isLoading = false;
-                        if (isAdded())
-                        {
+                        if (isAdded()) {
                             showLoadingIndicator(false);
                             Snackbar.make(recyclerView, R.string.connection_error, Snackbar.LENGTH_SHORT)
-                                    .setAction(R.string.try_again, new View.OnClickListener()
-                                    {
+                                    .setAction(R.string.try_again, new View.OnClickListener() {
                                         @Override
-                                        public void onClick(View v)
-                                        {
+                                        public void onClick(View v) {
                                             RetrofitSingleton.resetModelsObservable();
                                             showLoadingIndicator(true);
                                             getModelsList();
@@ -159,19 +138,16 @@ public class ModelsListFragment extends Fragment
                     }
 
                     @Override
-                    public void onNext(ArrayList<Model> newModels)
-                    {
+                    public void onNext(ArrayList<Model> newModels) {
                         Log.d(TAG, "onNext: " + newModels.size());
                         int prevSize = models.size();
                         isLoading = false;
-                        if (isAdded())
-                        {
+                        if (isAdded()) {
                             recyclerView.getAdapter().notifyItemRangeRemoved(0, prevSize);
                         }
                         models.clear();
                         models.addAll(newModels);
-                        if (isAdded())
-                        {
+                        if (isAdded()) {
                             recyclerView.getAdapter().notifyItemRangeInserted(0, models.size());
                             showLoadingIndicator(false);
                         }
@@ -180,19 +156,16 @@ public class ModelsListFragment extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Const.KEY_MODELS, models);
         outState.putBoolean(Const.KEY_IS_LOADING, isLoading);
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        if (subscription != null && !subscription.isUnsubscribed())
-        {
+        if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
     }

@@ -5,22 +5,18 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Model implements Parcelable
-{
+public class Model implements Parcelable {
     /**
      * Parcel implementation
      */
-    public static final Parcelable.Creator<Model> CREATOR = new Parcelable.Creator<Model>()
-    {
+    public static final Parcelable.Creator<Model> CREATOR = new Parcelable.Creator<Model>() {
         @Override
-        public Model createFromParcel(Parcel source)
-        {
+        public Model createFromParcel(Parcel source) {
             return new Model(source);
         }
 
         @Override
-        public Model[] newArray(int size)
-        {
+        public Model[] newArray(int size) {
             return new Model[size];
         }
     };
@@ -34,8 +30,7 @@ public class Model implements Parcelable
     /**
      * Parcel implementation
      */
-    private Model(Parcel in)
-    {
+    private Model(Parcel in) {
         this.title = in.readString();
         this.text = in.readString();
     }
@@ -44,8 +39,7 @@ public class Model implements Parcelable
      * Parcel implementation
      */
     @Override
-    public int describeContents()
-    {
+    public int describeContents() {
         return 0;
     }
 
@@ -53,29 +47,24 @@ public class Model implements Parcelable
      * Parcel implementation
      */
     @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(text);
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getText()
-    {
+    public String getText() {
         return text;
     }
 
-    public void setText(String text)
-    {
+    public void setText(String text) {
         this.text = text;
     }
 }

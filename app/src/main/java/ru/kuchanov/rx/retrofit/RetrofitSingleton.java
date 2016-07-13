@@ -18,20 +18,17 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
-public class RetrofitSingleton
-{
+public class RetrofitSingleton {
     private static final String TAG = RetrofitSingleton.class.getSimpleName();
 
     private static Observable<ArrayList<Model>> observableRetrofit;
     private static BehaviorSubject<ArrayList<Model>> observableModelsList;
     private static Subscription subscription;
 
-    private RetrofitSingleton()
-    {
+    private RetrofitSingleton() {
     }
 
-    public static void init()
-    {
+    public static void init() {
         Log.d(TAG, "init");
 
         RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
@@ -49,41 +46,33 @@ public class RetrofitSingleton
         observableRetrofit = apiService.getModelsList();
     }
 
-    public static void resetModelsObservable()
-    {
+    public static void resetModelsObservable() {
         observableModelsList = BehaviorSubject.create();
 
-        if (subscription != null && !subscription.isUnsubscribed())
-        {
+        if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
-        subscription = observableRetrofit.subscribe(new Subscriber<ArrayList<Model>>()
-        {
+        subscription = observableRetrofit.subscribe(new Subscriber<ArrayList<Model>>() {
             @Override
-            public void onCompleted()
-            {
+            public void onCompleted() {
                 //do nothing
             }
 
             @Override
-            public void onError(Throwable e)
-            {
+            public void onError(Throwable e) {
                 observableModelsList.onError(e);
             }
 
             @Override
-            public void onNext(ArrayList<Model> models)
-            {
+            public void onNext(ArrayList<Model> models) {
                 observableModelsList.onNext(models);
             }
         });
     }
 
 
-    public static Observable<ArrayList<Model>> getModelsObservable()
-    {
-        if (observableModelsList == null)
-        {
+    public static Observable<ArrayList<Model>> getModelsObservable() {
+        if (observableModelsList == null) {
             resetModelsObservable();
         }
         return observableModelsList;

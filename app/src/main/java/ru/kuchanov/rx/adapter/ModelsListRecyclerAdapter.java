@@ -11,25 +11,21 @@ import java.util.ArrayList;
 import ru.kuchanov.rx.R;
 import ru.kuchanov.rx.model.Model;
 
-public class ModelsListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-{
+public class ModelsListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Model> models;
 
-    public ModelsListRecyclerAdapter(ArrayList<Model> models)
-    {
+    public ModelsListRecyclerAdapter(ArrayList<Model> models) {
         this.models = models;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_model, parent, false);
         return new ViewHolderHotel(v);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-    {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolderHotel holderHotel = (ViewHolderHotel) holder;
         Model model = models.get(position);
 
@@ -38,17 +34,14 @@ public class ModelsListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return models.size();
     }
 
-    public static class ViewHolderHotel extends RecyclerView.ViewHolder
-    {
+    public static class ViewHolderHotel extends RecyclerView.ViewHolder {
         public TextView title, text;
 
-        public ViewHolderHotel(View v)
-        {
+        public ViewHolderHotel(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.title);
             text = (TextView) v.findViewById(R.id.text);
